@@ -12,7 +12,7 @@ post_summ(
 )
 }
 \arguments{
-\item{data}{A \link{list} outputted from \code{\link[=run_mod]{run_mod()}}.}
+\item{data}{A \link{list} outputted from \link{run_mod}.}
 
 \item{iso}{Specify \link{character} string to produce tables of only a
 specific antigen/antibody combination, entered with quotes. Default outputs
@@ -36,7 +36,7 @@ A \link{data.frame} summarizing estimate mean, standard deviation (SD),
 median, and quantiles (2.5\%, 25.0\%, 50.0\%, 75.0\%, 97.5\%).
 }
 \description{
-\code{post_summ()} takes a \link{list} output from \code{\link[=run_mod]{run_mod()}}
+\code{post_summ()} takes a \link{list} output from \link{run_mod}
 to summary table for parameter, antigen/antibody, and stratification
 combination.
 Defaults will produce every combination of antigen/antibody, parameters,

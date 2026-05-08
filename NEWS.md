@@ -1,5 +1,15 @@
 # serodynamics (development version)
 
+* Added `plot_serocurve()` for graphical visualization of population-level
+  serodynamic curves using posterior samples of the `mu.par` hyperparameter
+  (or optionally the "newperson" subject).  Supports 95% credible interval
+  ribbons, stratified curves with colour or faceting, and multiple
+  antigen-isotypes (#74).
+* `run_mod()` now monitors the `mu.par` hyperparameter and stores its
+  posterior samples on the latent parameter scale in a
+  `population_params` attribute of the returned `sr_model` object; functions
+  such as `plot_serocurve()` apply transformations to the original parameter
+  scale when needed (#74).
 * Expanded `.github/copilot-instructions.md` with additional guidance on evidence-based claims, Quarto markdown/cross-reference conventions, R style practices, and phrase-level line-break formatting for source text.
 * Fixed `dplyr::as_tibble()` references to `tibble::as_tibble()` in `post_summ()` and `run_mod()`, since `as_tibble()` is exported from the `tibble` package, not `dplyr`.
 * Added R 4.5+ snapshot variants to handle the changed attribute ordering in

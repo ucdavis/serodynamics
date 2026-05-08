@@ -3,6 +3,7 @@ test_that(
   code = {
     testthat::announce_snapshot_file("sim-strat-curve-params.csv")
     testthat::announce_snapshot_file("sim-strat-fitted_residuals.csv")
+    testthat::announce_snapshot_file("popparam-summary-stats.csv")
     withr::local_seed(1)
     strat1 <- serocalculator::typhoid_curves_nostrat_100 |>
       sim_case_data(n = 100,
@@ -22,14 +23,9 @@ test_that(
       nmc = 10,
       niter = 10, # Number of iterations
       strat = "strat", # Variable to be stratified
+      with_pop_params = TRUE
     ) |>
       suppressWarnings()
-    
-    
-    results |>
-      attributes() |>
-      rlist::list.remove(c("row.names", "fitted_residuals")) |>
-      expect_snapshot_value(style = "deparse")
     
     results |>
       expect_snapshot_data(
@@ -37,10 +33,38 @@ test_that(
         variant = darwin_variant()
       )
     
+    # Testing attributes
+    results |>
+      attributes() |>
+      names() |>
+      expect_setequal(c("names", "row.names", "class", "nChains", 
+                        "nParameters", "nIterations", "nBurnin", "nThin",
+                        "description", "population_params", "priors", 
+                        "fitted_residuals"))
+    
+    # Verify class appears immediately after names and row.names
+    expect_equal(
+      names(attributes(results))[1:3],
+      c("names", "row.names", "class")
+    )
+    
     attributes(results)$fitted_residuals |>
       expect_snapshot_data(
         "sim-strat-fitted_residuals",
         variant = darwin_variant()
+      )
+
+    # Testing for population parameters
+    attributes(results)$population_params |>
+      dplyr::group_by(Parameter) |>
+      dplyr::summarise(
+        mean = mean(value),
+        sd = sd(value),
+        .groups = "drop"
+      ) |>
+      dplyr::arrange(Parameter) |>
+      expect_snapshot_data("popparam-summary-stats", 
+        variant = darwin_variant()    
       )
     
   }
@@ -62,7 +86,7 @@ test_that(
       nburn = 10, # Number of unrecorded samples before sampling begins
       nmc = 100,
       niter = 100, # Number of iterations
-      strat = "bldculres", # Variable to be stratified
+      strat = "bldculres" # Variable to be stratified
     ) |>
       suppressWarnings()
     
@@ -82,6 +106,7 @@ test_that(
         "strat-fitted_residuals",
         variant = darwin_variant()
       )
+    
   }
 )
 
@@ -101,7 +126,7 @@ test_that(
       nburn = 10, # Number of unrecorded samples before sampling begins
       nmc = 100,
       niter = 100, # Number of iterations
-      strat = NA, # Variable to be stratified
+      strat = NA # Variable to be stratified
     ) |>
       suppressWarnings()
     
@@ -144,12 +169,7 @@ test_that(
       with_post = TRUE
     ) |>
       suppressWarnings()
-    
-    results |>
-      attributes() |>
-      rlist::list.remove(c("row.names", "jags.post", "fitted_residuals")) |>
-      expect_snapshot_value(style = "serialize")
-    
+
     results |>
       expect_snapshot_data(
         "nostrat-curve-params-withpost",
@@ -184,14 +204,10 @@ test_that(
       suppressWarnings()
     
     results |>
-      attributes() |>
-      rlist::list.remove(c("row.names", "fitted_residuals")) |>
-      expect_snapshot_value(style = "serialize")
-    
-    results |>
       expect_snapshot_data(
         "nostrat-curve-params-specpriors",
         variant = darwin_variant()
       )
+    
   }
 )

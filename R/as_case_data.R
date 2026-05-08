@@ -51,10 +51,24 @@ as_case_data <- function(
       visit_num = dplyr::row_number()
     ) |>
     serocalculator::set_id_var(id_var) |>
-    structure(
-      class = union("case_data", class(data)),
-      biomarker_var = biomarker_var,
-      timeindays = time_in_days,
-      value_var = value_var
-    )
+    (\(x) {
+      current_atts <- attributes(x)
+      # Explicitly order attributes so that class comes immediately after
+      # names and row.names, which is the expected position for tibble
+      # subclasses. tibble::as_tibble() on a subclass can reorder
+      # standard attributes, so we rebuild them in the correct order.
+      # Use current_atts$id_var to preserve any standardization done by
+      # serocalculator::set_id_var (e.g., renaming the ID column to "id").
+      new_atts <- list(
+        names = current_atts$names,
+        row.names = current_atts$row.names,
+        class = union("case_data", class(data)),
+        id_var = current_atts$id_var,
+        biomarker_var = biomarker_var,
+        timeindays = time_in_days,
+        value_var = value_var
+      )
+      attributes(x) <- new_atts
+      x
+    })()
 }

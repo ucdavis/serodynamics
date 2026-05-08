@@ -5,9 +5,10 @@
 \alias{nepal_sees_jags_output}
 \title{SEES Typhoid run_mod jags output}
 \format{
-An S3 object of class \code{sr_model}: A \link[tibble:tbl_df]{tibble::tbl_df} that contains
-the posterior predictive distribution of the person-specific parameters for
-a "new person" with no observed data (\code{Subject = "newperson"}) and posterior
+An S3 object of class \code{sr_model}: A \link[tibble:tbl_df-class]{tibble::tbl_df} that contains
+the
+posterior predictive distribution of the person-specific parameters for a
+"new person" with no observed data (\code{Subject = "newperson"}) and posterior
 distributions of the person-specific parameters for two arbitrarily-chosen
 subjects (\code{"sees_npl_1"} and \code{"sees_npl_2"}).
 Contains 40,000 \code{rows}, 7 \code{columns}, and model \code{attributes}.
@@ -23,7 +24,11 @@ Contains 40,000 \code{rows}, 7 \code{columns}, and model \code{attributes}.
 \code{sees_npl_2}}
 \item{value}{Estimated value of the parameter}
 \item{attributes}{A \link{list} of \code{attributes} that summarize the jags inputs,
-priors, and optional jags_post mcmc object}
+priors, optional jags_post mcmc object, and population-level parameters.
+Includes a \code{population_params} attribute with posterior samples of the
+population-level parameters (\code{mu.par}, \code{prec.par}, \code{prec.logy}), indexed
+by \code{Iteration}, \code{Chain}, \code{Parameter}, \code{Iso_type}, \code{Stratification}, and
+\code{Population_Parameter}.}
 }
 }
 \source{

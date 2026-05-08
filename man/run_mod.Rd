@@ -14,6 +14,7 @@ run_mod(
   niter = 100,
   strat = NA,
   with_post = FALSE,
+  with_pop_params = FALSE,
   ...
 )
 }
@@ -40,6 +41,11 @@ entered in quotes.}
 component
 should be included as an element of the \link{list} object returned by \code{run_mod()}
 (see \code{Value} section below for details).
+Note: These objects can be large.}
+
+\item{with_pop_params}{A \link{logical} value specifying whether population
+level parameters should be included as an attribute entitled
+\code{population_params}. Excluded as default.
 Note: These objects can be large.}
 
 \item{...}{
@@ -93,7 +99,7 @@ If specified, must be 2 values long:
   }}
 }
 \value{
-An \code{sr_model} class object: a subclass of \link[tibble:tbl_df]{tibble::tbl_df} that
+An \code{sr_model} class object: a subclass of \link[tibble:tbl_df-class]{tibble::tbl_df} that
 contains MCMC samples from the joint posterior distribution of the model
 parameters, conditional on the provided input \code{data},
 including the following:
@@ -120,6 +126,19 @@ including the following:
 \item \code{nIterations}: Number of iteration specified.
 \item \code{nBurnin}: Number of burn ins.
 \item \code{nThin}: Thinning number (niter/nmc).
+\item \code{population_params}: Optionally included modeled population parameters
+indexed by
+\code{Iteration},
+\code{Chain}, \code{Parameter}, \code{Iso_type}, and \code{Stratification}. Excluded as
+default. Includes the following modeled population parameters:
+\itemize{
+\item \code{mu.par} = The population means of the host-specific model parameters
+(on logarithmic scales).
+\item \code{prec.par} = The population precision matrix of the hyperparameters
+(with diagonal elements equal to inverse variances).
+\item \code{prec.logy} = A vector of population precisions (inverse variances),
+one per antigen/isotype combination.
+}
 \item \code{priors}: A \link{list} that summarizes the input priors, including:
 \itemize{
 \item \code{mu_hyp_param}
