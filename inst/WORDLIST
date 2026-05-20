@@ -14,7 +14,9 @@ PR's
 Postprocess
 Rhat
 SHA
+SeRG
 TSI
+UCD
 Vectorization
 Wasserstein
 allowlist
@@ -59,6 +61,7 @@ strat
 stratifications
 tbl
 testthat
+tidyverse
 toolchain
 unstratified
 vh
