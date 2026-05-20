@@ -55,11 +55,13 @@ model {
    }
     
   # these are random effects 
-   y0[subj,cur_antigen_iso]    <- exp(par[subj,cur_antigen_iso,1])
-   y1[subj,cur_antigen_iso]    <- y0[subj,cur_antigen_iso] + exp(par[subj,cur_antigen_iso,2]) # par[,,2] must be log(y1-y0)
-   t1[subj,cur_antigen_iso]    <- exp(par[subj,cur_antigen_iso,3])
-   alpha[subj,cur_antigen_iso] <- exp(par[subj,cur_antigen_iso,4]) # `nu` in the paper
-   shape[subj,cur_antigen_iso] <- exp(par[subj,cur_antigen_iso,5]) + 1 # `r` in the paper
+   y0[subj,cur_antigen_iso]       <- exp(par[subj,cur_antigen_iso,1])
+   # par[,,2] is log(y1-y0):
+   change_y[subj,cur_antigen_iso] <- exp(par[subj,cur_antigen_iso,2])
+   y1[subj,cur_antigen_iso]       <- y0[subj,cur_antigen_iso] + change_y[subj,cur_antigen_iso]
+   t1[subj,cur_antigen_iso]       <- exp(par[subj,cur_antigen_iso,3])
+   alpha[subj,cur_antigen_iso]    <- exp(par[subj,cur_antigen_iso,4]) # `nu` in the paper
+   shape[subj,cur_antigen_iso]    <- exp(par[subj,cur_antigen_iso,5]) + 1 # `r` in the paper
    
    # `n_params` is the number of model parameters; y0, y1, t1, alpha (aka nu), and r
    # this is the prior distribution
