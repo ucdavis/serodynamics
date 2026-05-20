@@ -9,7 +9,7 @@ test_that(
           sim_case_data(n = 5)
       }
     )
-
+    
     test_obj <- test_obj |>
       as_case_data(
         id_var = "id",
@@ -17,7 +17,7 @@ test_that(
         time_in_days = "timeindays",
         value_var = "value"
       )
-
+    
     test_obj |>
       attributes() |>
       rlist::list.remove("row.names") |>

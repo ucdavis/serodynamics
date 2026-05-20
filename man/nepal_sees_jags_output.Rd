@@ -6,8 +6,9 @@
 \title{SEES Typhoid run_mod jags output}
 \format{
 An S3 object of class \code{sr_model}: A \link[tibble:tbl_df]{tibble::tbl_df} that contains
-the posterior predictive distribution of the person-specific parameters for
-a "new person" with no observed data (\code{Subject = "newperson"}) and posterior
+the
+posterior predictive distribution of the person-specific parameters for a
+"new person" with no observed data (\code{Subject = "newperson"}) and posterior
 distributions of the person-specific parameters for two arbitrarily-chosen
 subjects (\code{"sees_npl_1"} and \code{"sees_npl_2"}).
 Contains 40,000 \code{rows}, 7 \code{columns}, and model \code{attributes}.

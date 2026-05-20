@@ -14,6 +14,8 @@ run_mod(
   niter = 100,
   strat = NA,
   with_post = FALSE,
+  with_pop_params = FALSE,
+  preclogy_per_iso = FALSE,
   ...
 )
 }
@@ -37,10 +39,23 @@ the number of MCMC chains to be run per jags model.}
 entered in quotes.}
 
 \item{with_post}{A \link{logical} value specifying whether a raw \code{jags.post}
-component
-should be included as an element of the \link{list} object returned by \code{run_mod()}
+object should be included as an optional \code{"jags.post"} attribute on the
+returned \code{sr_model} tibble
 (see \code{Value} section below for details).
 Note: These objects can be large.}
+
+\item{with_pop_params}{A \link{logical} value specifying whether population
+level parameters should be included as an attribute entitled
+\code{population_params}. Excluded by default.
+Note: These objects can be large.}
+
+\item{preclogy_per_iso}{A \link{logical} value. When \code{TRUE} and \code{with_pop_params}
+is also \code{TRUE}, the \code{Parameter} column for \code{prec.logy} rows in
+\code{population_params} will contain the antigen/isotype label (e.g.,
+\code{"HlyE_IgA"}) rather than the constant \code{"prec.logy"}. This allows grouping
+by \code{Parameter} to obtain per-isotype precision estimates directly. Default
+is \code{FALSE} (all \code{prec.logy} rows share \code{Parameter = "prec.logy"}; the
+\code{Iso_type} column distinguishes isotypes).}
 
 \item{...}{
   Arguments passed on to \code{\link{prep_priors}}
@@ -98,8 +113,8 @@ contains MCMC samples from the joint posterior distribution of the model
 parameters, conditional on the provided input \code{data},
 including the following:
 \itemize{
-\item \code{iteration} = Number of sampling iterations
-\item \code{chain} = Number of MCMC chains run; between 1 and 4
+\item \code{Iteration} = Number of sampling iterations
+\item \code{Chain} = Number of MCMC chains run; between 1 and 4
 \item \code{Parameter} = Parameter being estimated. Includes the following:
 \itemize{
 \item \code{y0} = Posterior estimate of baseline antibody concentration
@@ -115,11 +130,30 @@ including the following:
 \item The following \link{attributes} are included in the output:
 \itemize{
 \item \code{class}: Class of the output object.
-\item \code{nChain}: Number of chains run.
+\item \code{nChains}: Number of chains run.
 \item \code{nParameters}: The amount of parameters estimated in the model.
 \item \code{nIterations}: Number of iteration specified.
 \item \code{nBurnin}: Number of burn ins.
 \item \code{nThin}: Thinning number (niter/nmc).
+\item \code{population_params}: Optionally included modeled population parameters,
+returned as a \link{data.frame} and excluded by default.
+Columns include
+\code{Iteration}, \code{Chain}, \code{Parameter}, \code{Iso_type}, \code{Stratification},
+\code{Population_Parameter}, and \code{value}.
+\itemize{
+\item \code{Population_Parameter} identifies which modeled population parameter
+is represented:
+\itemize{
+\item \code{mu.par} = The population means of the host-specific model
+parameters (on logarithmic scales). Note: y1 and shape are transformed.
+\item \code{prec.par} = The population precision matrix of the
+hyperparameters (with diagonal elements equal to inverse variances).
+The two parameters listed (separated by commas) represent the pairwise
+precision relationship between specified parameters.
+\item \code{prec.logy} = A vector of population precisions (inverse
+variances), one per antigen/isotype combination.
+}
+}
 \item \code{priors}: A \link{list} that summarizes the input priors, including:
 \itemize{
 \item \code{mu_hyp_param}

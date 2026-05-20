@@ -23,3 +23,15 @@ darwin_variant <- function() {
 r45_variant <- function() {
   if (getRversion() >= "4.5") "r45" else NULL
 }
+
+# Get snapshot variant for R versions beyond 4.6
+#
+# Returns NULL for R 4.6.x (the current baseline) and a version string like
+# "r47" for R 4.7.x+. Used in snapshot tests that capture object structure
+# (e.g. attribute lists from run_mod) so that changes introduced by a new R
+# release produce a test failure rather than a silent mismatch.
+r46_variant <- function() {
+  v <- getRversion()
+  if (v >= "4.7") paste0("r", as.integer(v$major), as.integer(v$minor)) 
+  else NULL
+}
