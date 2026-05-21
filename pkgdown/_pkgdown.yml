@@ -54,6 +54,10 @@ articles:
   contents:
   - articles/getting-started
 
+- title: Software Application Profile
+  contents:
+  - articles/manuscript
+
 - title: Developer Notes
   contents:
   - articles/os-snapshot-analysis
